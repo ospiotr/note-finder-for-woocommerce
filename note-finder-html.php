@@ -54,14 +54,26 @@
 			'search'  => sanitize_text_field( $searchkeyword ),
 
 		);
-		remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
-		$notes = get_comments( $args );
-		add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+if ( function_exists('icl_object_id') ) {
+    global $sitepress;
+    remove_filter( 'comments_clauses', array( $sitepress, 'comments_clauses' ), 10, 2 );
+}
+remove_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+$notes = get_comments( $args );
+add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
+if ( function_exists('icl_object_id') ) {
+    add_filter( 'comments_clauses', array( $sitepress, 'comments_clauses' ), 10, 2 );
+}
 		if ( $notes ) {
 			foreach ( $notes as $note ) {
-				$post_id  = $note->comment_post_ID;
-				$order    = wc_get_order( $post_id );
-				$order_id = $order->get_order_number();
+							$post_id = $note->comment_post_ID;
+							$order   = wc_get_order( $post_id );
+
+							if ( ! $order ) {
+								continue;
+							}
+
+							$order_id = $order->get_order_number();
 				?>
                 <tr>
                     <td style="width: 60px">

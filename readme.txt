@@ -62,6 +62,10 @@ Please make sure that WooCommerce plugin is installed and active.
 
 == Changelog ==
 
+= 1.3 =
+* Fixed fatal error
+* Added WPML support
+
 = 1.2 =
 * Added compatibility with WooCommerce 5.1 and WordPress 5.7
 
